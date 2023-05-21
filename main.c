@@ -3,9 +3,9 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-#define SCREEN_WIDTH 1000
-#define SCREEN_HEIGHT 1000
-#define MAX_FRAMERATE 60
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 640
+#define MAX_FRAMERATE 1
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderTarget = NULL;
@@ -41,6 +41,10 @@ int initialize()
          printf("window creation error\n");
          return 1;
       }
+      else
+      {
+
+      }
    }
    
    // open start file
@@ -49,6 +53,10 @@ int initialize()
    {
       printf("file open error\n");
       return 1;
+   }
+   else
+   {
+
    }
 
    // get game width, height, and set scale
@@ -59,7 +67,7 @@ int initialize()
    // get starting state
    gameState = malloc(sizeof(char) * width * height);
    char c = getc(in);
-   unsigned int index = 0;
+   int index = 0;
    while(index < width * height)
    {
       c = getc(in);
@@ -99,6 +107,10 @@ void events(SDL_Event *event)
    {
       running = false;
    }
+   else
+   {
+
+   }
 }
 
 void update()
@@ -112,6 +124,139 @@ void update()
    {
       frameTime = 0;
       // add things here
+
+      // determine number of live cells for each index
+      int row = 0;
+      int index = 0;
+      int indexNumberOfLiveCells[width * height];
+      while(index < width * height)
+      {
+         int numberOfLiveCells = 0;
+         row = index / width;
+
+         // top-left
+         if(index % width > 0)
+         {
+            if(gameState[index - width - 1] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+
+         // top
+         if(index > width)
+         {
+            if(gameState[index - width] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+
+         // top-right
+         if(index % width < width)
+         {
+            if(gameState[index - width + 1] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+
+         // left
+         if(index % width > 0)
+         {
+            if(gameState[index - 1] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+
+         // right
+         if(index % width < width)
+         {
+            if(gameState[index + 1] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+
+         // bottom-left
+         if(index % width > 0)
+         {
+            if(gameState[index + width - 1] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+
+         // bottom
+         if(index < width * height - width)
+         {
+            if(gameState[index + width] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+         
+         // bottom right
+         if(index % width < width)
+         {
+            if(gameState[index + width + 1] == '#')
+            {
+               numberOfLiveCells++;
+            }
+            else
+            {
+
+            }
+         }
+
+         // give corresponding index number of live cells
+         indexNumberOfLiveCells[index] = numberOfLiveCells; 
+         index++;
+      }
+
+      // update the game state based on the index number of live cells
+      index = 0;
+      while(index < width * height)
+      {
+         if(indexNumberOfLiveCells[index] == 2 || indexNumberOfLiveCells[index] == 3)
+         {
+            gameState[index] = '#';
+         }
+         else
+         {
+            gameState[index] = ' ';
+         }
+         index++;
+      }
    } 
 }
 
@@ -123,7 +268,7 @@ void render()
    SDL_SetRenderDrawColor(renderTarget, 255.0f, 255.0f, 255.0f, 1.0f);
    SDL_Rect cell = { 0, 0, scale, scale };
 
-   unsigned int index = 0;
+   int index = 0;
    for(int column = 0; column < height; column++)
    {
       for(int row = 0; row < width; row++)
@@ -134,6 +279,10 @@ void render()
             cell.x = row * scale;
             cell.y = column * scale;
             SDL_RenderFillRect(renderTarget, &cell);
+         }
+         else
+         {
+
          }
       }
    }
@@ -154,6 +303,10 @@ int main()
    if(initialize() == 1)
    {
       return 1;
+   }
+   else
+   {
+
    }
    // loop
    while(running)
