@@ -247,13 +247,27 @@ void update()
       index = 0;
       while(index < width * height)
       {
-         if(indexNumberOfLiveCells[index] == 2 || indexNumberOfLiveCells[index] == 3)
+         if(gameState[index] == '#')
          {
-            gameState[index] = '#';
+            if(indexNumberOfLiveCells[index] == 2 || indexNumberOfLiveCells[index] == 3)
+            {
+
+            }
+            else
+            {
+               gameState[index] = ' ';
+            }
          }
          else
          {
-            gameState[index] = ' ';
+            if(indexNumberOfLiveCells[index] == 3)
+            {
+               gameState[index] = '#';
+            }
+            else
+            {
+
+            }
          }
          index++;
       }
