@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-std=c17
-LDFLAGS=-lm -lSDL2 -lSDL2_image
+LDFLAGS=-lm -lSDL2
 PROJECT_NAME=gameOfLife
 
 build: main.c
